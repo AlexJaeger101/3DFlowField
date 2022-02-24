@@ -19,12 +19,6 @@ public class FlowFieldManager : MonoBehaviour
         mFlowField.InitCost();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void InitFlowField()
     {
         mFlowField = new FlowField(mCellRadius, mSize);
@@ -33,29 +27,24 @@ public class FlowFieldManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (mShouldDisplayGrid && mFlowField == null)
+        if (mShouldDisplayGrid && mFlowField == null) //Visualize grid before being made
         {
-            DrawGrid(mSize, mCellRadius);
+            Gizmos.color = Color.green;
+
+            for (int i = 0; i < mSize.x; ++i)
+            {
+                for (int j = 0; j < mSize.y; ++j)
+                {
+                    Vector3 center = new Vector3((mCellRadius * 2) * i + mCellRadius, 0, (mCellRadius * 2) * j + mCellRadius);
+                    Gizmos.DrawCube(center, (Vector3.one * mCellRadius * 2));
+                }
+            }
         }
-        else if (mShouldDisplayGrid && mFlowField != null)
+        else if (mShouldDisplayGrid && mFlowField != null) //Visualize Cost Field for created grid
         {
             foreach (FlowCell cell in mFlowField.mFlowGrid)
             {
                 Handles.Label(cell.mWorldPos, cell.mCost.ToString());
-            }
-        }
-    }
-
-    void DrawGrid(Vector2Int size, float radius)
-    {
-        Gizmos.color = Color.green;
-
-        for (int i = 0; i < size.x; ++i)
-        {
-            for (int j = 0; j < size.y; ++j)
-            {
-                Vector3 center = new Vector3((radius * 2) * i + radius, 0, (radius * 2) * j + radius);
-                Gizmos.DrawCube(center, (Vector3.one * radius * 2));
             }
         }
     }

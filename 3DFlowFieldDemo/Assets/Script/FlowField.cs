@@ -46,7 +46,7 @@ public class FlowField
                 }
                 else if (!hasCostIncreased && col.gameObject.layer == 7) //passable
                 {
-                    cell.IncCost(3);
+                    cell.IncCost(1);
                     hasCostIncreased = true;
                 }
             }
