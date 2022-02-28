@@ -17,7 +17,7 @@ public class FlowCell
         mWorldPos = worldPos;
         mIndex = index;
         mCost = 1;
-        mBestCost = int.MaxValue;
+        mBestCost = MAX_COST;
     }
 
     public void IncCost(int incAmout)
@@ -34,6 +34,11 @@ public class FlowCell
         {
             mCost += incAmout;
         }
+    }
+
+    public int GetMaxCost()
+    {
+        return MAX_COST;
     }
 }
 

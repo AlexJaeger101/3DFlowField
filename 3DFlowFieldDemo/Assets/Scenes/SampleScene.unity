@@ -748,7 +748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSize: {x: 30, y: 30}
   mCellRadius: 0.5
-  mShouldDisplayGrid: 0
+  mShouldDisplayGrid: 1
   mDebugType: 1
 --- !u!4 &1925354861
 Transform:

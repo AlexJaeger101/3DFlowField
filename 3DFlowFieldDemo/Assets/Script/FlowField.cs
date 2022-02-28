@@ -32,7 +32,7 @@ public class FlowField
     public void InitCost()
     {
         Vector3 halfExtend = Vector3.one * mCellRadius;
-        int layerMask = LayerMask.GetMask("Impassable", "Terrian");
+        int layerMask = LayerMask.GetMask("Impassable", "Terrian", "RoughTerrian");
         foreach(FlowCell cell in mFlowGrid)
         {
             Collider[] obstacle = Physics.OverlapBox(cell.mWorldPos, halfExtend, Quaternion.identity, layerMask);
@@ -48,6 +48,11 @@ public class FlowField
                 else if (!hasCostIncreased && col.gameObject.layer == 7) //passable
                 {
                     cell.IncCost(1);
+                    hasCostIncreased = true;
+                }
+                else if (!hasCostIncreased && col.gameObject.layer ==8) //rough terrian
+                {
+                    cell.IncCost(4);
                     hasCostIncreased = true;
                 }
             }
@@ -71,11 +76,7 @@ public class FlowField
 
             foreach(FlowCell currentNeighbor in neighbors)
             {
-                if (currentNeighbor.mCost == int.MaxValue)
-                {
-                    continue;
-                }
-                else if (currentNeighbor.mCost + currentFlowCell.mBestCost < currentFlowCell.mBestCost)
+                if (currentNeighbor.mCost + currentFlowCell.mBestCost < currentNeighbor.mBestCost)
                 {
                     currentNeighbor.mBestCost = currentNeighbor.mCost + currentFlowCell.mBestCost;
                     openQueue.Enqueue(currentNeighbor);
@@ -87,7 +88,6 @@ public class FlowField
     private List<FlowCell> GetNeighbors(Vector2Int index, List<FlowCellDirection> flowDir)
     {
         List<FlowCell> neighbors = new List<FlowCell>();
-
         foreach(Vector2Int dir in flowDir)
         {
             FlowCell currentNeighbor = GetCellNeighbor(index, dir);
