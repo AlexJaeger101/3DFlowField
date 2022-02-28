@@ -5,6 +5,14 @@ using UnityEditor;
 
 public class FlowFieldManager : MonoBehaviour
 {
+    //Enum for debug view
+    public enum DebugDisplayType
+    {
+        OFF,
+        COST_FIELD,
+        INTEGRATION_FIELD
+    };
+
     [Header("Flow Field Data")]
     public Vector2Int mSize;
     public float mCellRadius = 0.5f;
@@ -12,11 +20,27 @@ public class FlowFieldManager : MonoBehaviour
 
     [Header("Debug")]
     public bool mShouldDisplayGrid;
+    public DebugDisplayType mDebugType;
+    
 
     void Start()
     {
-        InitFlowField();
-        mFlowField.InitCost();
+
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            InitFlowField();
+            mFlowField.InitCost();
+
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
+            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            
+            FlowCell end = mFlowField.ConvertWorldToCellPos(worldMousePos);
+            mFlowField.InitIntergration(end);
+        }
     }
 
     private void InitFlowField()
@@ -42,9 +66,35 @@ public class FlowFieldManager : MonoBehaviour
         }
         else if (mShouldDisplayGrid && mFlowField != null) //Visualize Cost Field for created grid
         {
-            foreach (FlowCell cell in mFlowField.mFlowGrid)
+            switch (mDebugType)
             {
-                Handles.Label(cell.mWorldPos, cell.mCost.ToString());
+                case DebugDisplayType.COST_FIELD:
+
+                    foreach (FlowCell cell in mFlowField.mFlowGrid)
+                    {
+                        Handles.Label(cell.mWorldPos, cell.mCost.ToString());
+                    }
+                    
+                    break;
+
+                case DebugDisplayType.INTEGRATION_FIELD:
+
+                    foreach (FlowCell cell in mFlowField.mFlowGrid)
+                    {
+                        Handles.Label(cell.mWorldPos, cell.mBestCost.ToString());
+                    }
+
+                    break;
+
+                case DebugDisplayType.OFF:
+
+                    Debug.Log("Debug Now Off");
+                    break;
+
+                default:
+
+                    Debug.LogError("ERROR: Invalid Debug Display Type");
+                    break;
             }
         }
     }
