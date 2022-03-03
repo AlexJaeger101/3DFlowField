@@ -57,7 +57,7 @@ public class UnitManager : MonoBehaviour
     {
         Vector2Int size = mFFM.mSize;
         float rad = mFFM.mCellRadius;
-        Vector2 spawnPos = new Vector2(size.x * (rad * 2) + rad, size.y * (rad * 2) + rad);
+        Vector2 spawnPos = new Vector2(size.x * rad * 2 + rad, size.y * rad * 2 + rad);
         int layer = LayerMask.GetMask("Impassable", "Terrian", "RoughTerrian");
         
         Vector3 newPos = Vector3.zero;

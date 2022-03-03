@@ -11,36 +11,31 @@ public class FlowCell
     public int mBestCost;
     public FlowCellDirection mBestDir;
 
-    const int MAX_COST = 100;
+    public readonly int mMaxCost = 100;
 
     public FlowCell(Vector3 worldPos, Vector2Int index)
     {
         mWorldPos = worldPos;
         mIndex = index;
         mCost = 1;
-        mBestCost = MAX_COST;
+        mBestCost = mMaxCost;
         mBestDir = FlowCellDirection.NoDir;
     }
 
     public void IncCost(int incAmout)
     {
-        if (mCost == MAX_COST)
+        if (mCost == mMaxCost)
         {
             return;
         }
-        else if (incAmout + mCost >= MAX_COST)
+        else if (incAmout + mCost >= mMaxCost)
         {
-            mCost = MAX_COST;
+            mCost = mMaxCost;
         }
         else
         {
             mCost += incAmout;
         }
-    }
-
-    public int GetMaxCost()
-    {
-        return MAX_COST;
     }
 }
 

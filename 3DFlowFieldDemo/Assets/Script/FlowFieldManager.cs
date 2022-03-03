@@ -110,64 +110,70 @@ public class FlowFieldManager : MonoBehaviour
                             sr.sprite = mSmileSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
-                        else if (cell.mCost == cell.GetMaxCost())
+                        else if (cell.mCost == cell.mMaxCost)
                         {
                             sr.sprite = mXSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.UpDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.DownDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 180, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.RightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 90, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.LeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 270, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.TopRightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 45, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.TopLeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 315, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.BottomLeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 225, 0);
                             icon.transform.rotation = newRot;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.BottomRightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 135, 0);
                             icon.transform.rotation = newRot;
-                        }
-                        else
-                        {
-                            sr.sprite = mXSprite;
+                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                     }
 

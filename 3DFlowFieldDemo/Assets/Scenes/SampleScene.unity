@@ -993,7 +993,7 @@ MonoBehaviour:
   mSize: {x: 30, y: 30}
   mCellRadius: 0.5
   mShouldDisplayGrid: 1
-  mDebugType: 0
+  mDebugType: 3
   mArrowSprite: {fileID: 21300000, guid: 2243384e6785dfa4990ba1192bee3bad, type: 3}
   mXSprite: {fileID: 21300000, guid: 32f5af5e94ca3164a8893b7e09df67c6, type: 3}
   mSmileSprite: {fileID: 21300000, guid: 91da657f425730749b438c1c1e209dac, type: 3}
@@ -1005,7 +1005,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1925354859}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.092, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
