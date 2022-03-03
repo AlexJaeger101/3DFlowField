@@ -9,6 +9,7 @@ public class FlowCell
     public Vector2Int mIndex;
     public int mCost;
     public int mBestCost;
+    public FlowCellDirection mBestDir;
 
     const int MAX_COST = 100;
 
@@ -18,6 +19,7 @@ public class FlowCell
         mIndex = index;
         mCost = 1;
         mBestCost = MAX_COST;
+        mBestDir = FlowCellDirection.NoDir;
     }
 
     public void IncCost(int incAmout)
@@ -86,11 +88,5 @@ public class FlowCellDirection
         }
 
         return NoDir;
-    }
-
-    //Vector2 conversions
-    public static implicit operator Vector2Int(FlowCellDirection dir)
-    {
-        return dir.mDirVector;
     }
 }

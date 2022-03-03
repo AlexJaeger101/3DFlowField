@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class FlowField
 {
+    enum GridLayers
+    {
+        IMPASSABLE = 6,
+        SMOOTH_TERRAIN = 7,
+        ROUGH_TERRAIN = 8
+    }
+
     public FlowCell[,] mFlowGrid;
     public Vector2Int mSize;
     public float mCellRadius;
@@ -40,17 +47,12 @@ public class FlowField
             
             foreach(Collider col in obstacle)
             {
-                if (col.gameObject.layer == 6) //Impassable Layer
+                if (col.gameObject.layer == (int)GridLayers.IMPASSABLE)
                 {
-                    cell.IncCost(255);
+                    cell.IncCost(1000);
                     continue;
                 }
-                else if (!hasCostIncreased && col.gameObject.layer == 7) //passable
-                {
-                    cell.IncCost(1);
-                    hasCostIncreased = true;
-                }
-                else if (!hasCostIncreased && col.gameObject.layer ==8) //rough terrian
+                else if (!hasCostIncreased && col.gameObject.layer == (int)GridLayers.ROUGH_TERRAIN)
                 {
                     cell.IncCost(4);
                     hasCostIncreased = true;
@@ -85,34 +87,38 @@ public class FlowField
         }
     }
 
+    public void InitFlowField()
+    {
+        foreach(FlowCell cell in mFlowGrid)
+        {
+            List<FlowCell> neighbors = GetNeighbors(cell.mIndex, FlowCellDirection.DirectionList);
+            int currentBestCost = cell.mBestCost;
+
+            foreach(FlowCell neighbor in neighbors)
+            {
+                if (neighbor.mBestCost < currentBestCost)
+                {
+                    currentBestCost = neighbor.mBestCost;
+                    cell.mBestDir = FlowCellDirection.GetDirection(neighbor.mIndex - cell.mIndex);
+                }
+            }
+        }
+    }
+
     private List<FlowCell> GetNeighbors(Vector2Int index, List<FlowCellDirection> flowDir)
     {
         List<FlowCell> neighbors = new List<FlowCell>();
-        foreach(Vector2Int dir in flowDir)
+        foreach(FlowCellDirection dir in flowDir)
         {
-            FlowCell currentNeighbor = GetCellNeighbor(index, dir);
-            if (currentNeighbor != null)
+            Vector2Int newPos = index + dir.mDirVector;
+            if (!(newPos.x < 0 || newPos.x >= mSize.x || newPos.y < 0 || newPos.y >= mSize.y)) // make sure we are in range
             {
-                neighbors.Add(currentNeighbor);
+                neighbors.Add(mFlowGrid[newPos.x, newPos.y]);
             }
         }
 
 
         return neighbors;
-    }
-
-    private FlowCell GetCellNeighbor(Vector2Int origin, Vector2Int pos)
-    {
-        Vector2Int newPos = origin + pos;
-
-        if (newPos.x < 0 || newPos.x >= mSize.x || newPos.y < 0 || newPos.y >= mSize.y) // make sure we are in range
-        {
-            return null;
-        }
-        else
-        {
-            return mFlowGrid[newPos.x, newPos.y];
-        }
     }
 
     public FlowCell ConvertWorldToCellPos(Vector3 worldPos)

@@ -10,7 +10,8 @@ public class FlowFieldManager : MonoBehaviour
     {
         OFF,
         COST_FIELD,
-        INTEGRATION_FIELD
+        INTEGRATION_FIELD,
+        FLOW_FIELD
     };
 
     [Header("Flow Field Data")]
@@ -21,7 +22,11 @@ public class FlowFieldManager : MonoBehaviour
     [Header("Debug")]
     public bool mShouldDisplayGrid;
     public DebugDisplayType mDebugType;
-    
+
+    [Header("DebugSprites")]
+    public Sprite mArrowSprite;
+    public Sprite mXSprite;
+    public Sprite mSmileSprite;
 
     void Start()
     {
@@ -40,6 +45,7 @@ public class FlowFieldManager : MonoBehaviour
             
             FlowCell end = mFlowField.ConvertWorldToCellPos(worldMousePos);
             mFlowField.InitIntergration(end);
+            mFlowField.InitFlowField();
         }
     }
 
@@ -51,7 +57,7 @@ public class FlowFieldManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (mShouldDisplayGrid && mFlowField == null) //Visualize grid before being made
+        if (mShouldDisplayGrid && mFlowField == null && mDebugType != DebugDisplayType.OFF) //Visualize grid before being made
         {
             Gizmos.color = Color.green;
 
@@ -74,7 +80,8 @@ public class FlowFieldManager : MonoBehaviour
                     {
                         Handles.Label(cell.mWorldPos, cell.mCost.ToString());
                     }
-                    
+                    ClearDisplay();
+
                     break;
 
                 case DebugDisplayType.INTEGRATION_FIELD:
@@ -83,11 +90,92 @@ public class FlowFieldManager : MonoBehaviour
                     {
                         Handles.Label(cell.mWorldPos, cell.mBestCost.ToString());
                     }
+                    ClearDisplay();
+
+                    break;
+
+                case DebugDisplayType.FLOW_FIELD:
+
+                    ClearDisplay();
+
+                    foreach (FlowCell cell in mFlowField.mFlowGrid)
+                    {
+                        GameObject icon = new GameObject();
+                        SpriteRenderer sr = icon.AddComponent<SpriteRenderer>();
+                        icon.transform.parent = transform;
+                        icon.transform.position = cell.mWorldPos;
+
+                        if (cell.mCost == 0)
+                        {
+                            sr.sprite = mSmileSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 0, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mCost == cell.GetMaxCost())
+                        {
+                            sr.sprite = mXSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 0, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.UpDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 0, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.DownDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 180, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.RightDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 90, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.LeftDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 270, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.TopRightDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 45, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.TopLeftDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 315, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.BottomLeftDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 225, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else if (cell.mBestDir == FlowCellDirection.BottomRightDir)
+                        {
+                            sr.sprite = mArrowSprite;
+                            Quaternion newRot = Quaternion.Euler(90, 135, 0);
+                            icon.transform.rotation = newRot;
+                        }
+                        else
+                        {
+                            sr.sprite = mXSprite;
+                        }
+                    }
 
                     break;
 
                 case DebugDisplayType.OFF:
 
+                    ClearDisplay();
                     Debug.Log("Debug Now Off");
                     break;
 
@@ -96,6 +184,14 @@ public class FlowFieldManager : MonoBehaviour
                     Debug.LogError("ERROR: Invalid Debug Display Type");
                     break;
             }
+        }
+    }
+
+    public void ClearDisplay()
+    {
+        foreach(Transform trans in transform)
+        {
+            GameObject.Destroy(trans.gameObject);
         }
     }
 }
