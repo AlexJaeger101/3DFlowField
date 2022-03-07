@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public class FlowFieldManager : MonoBehaviour
 {
@@ -28,11 +26,6 @@ public class FlowFieldManager : MonoBehaviour
     public Sprite mXSprite;
     public Sprite mSmileSprite;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -40,12 +33,13 @@ public class FlowFieldManager : MonoBehaviour
             InitFlowField();
             mFlowField.InitCost();
 
-            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-            
-            FlowCell end = mFlowField.ConvertWorldToCellPos(worldMousePos);
-            mFlowField.InitIntergration(end);
-            mFlowField.InitFlowField();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                FlowCell end = mFlowField.ConvertWorldToCellPos(hit.point);
+                mFlowField.InitIntergration(end);
+                mFlowField.InitFlowField();
+            }
         }
     }
 
@@ -76,107 +70,96 @@ public class FlowFieldManager : MonoBehaviour
             {
                 case DebugDisplayType.COST_FIELD:
 
+                    ClearDisplay();
                     foreach (FlowCell cell in mFlowField.mFlowGrid)
                     {
                         Handles.Label(cell.mWorldPos, cell.mCost.ToString());
                     }
-                    ClearDisplay();
 
                     break;
 
                 case DebugDisplayType.INTEGRATION_FIELD:
 
+                    ClearDisplay();
                     foreach (FlowCell cell in mFlowField.mFlowGrid)
                     {
                         Handles.Label(cell.mWorldPos, cell.mBestCost.ToString());
                     }
-                    ClearDisplay();
 
                     break;
 
                 case DebugDisplayType.FLOW_FIELD:
 
                     ClearDisplay();
-
                     foreach (FlowCell cell in mFlowField.mFlowGrid)
                     {
                         GameObject icon = new GameObject();
                         SpriteRenderer sr = icon.AddComponent<SpriteRenderer>();
                         icon.transform.parent = transform;
-                        icon.transform.position = cell.mWorldPos;
+                        icon.transform.position = cell.mWorldPos + new Vector3(0.0f, 0.1f, 0.0f);
+                        icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
 
                         if (cell.mCost == 0)
                         {
                             sr.sprite = mSmileSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mCost == cell.mMaxCost)
                         {
                             sr.sprite = mXSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.UpDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 0, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.DownDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 180, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.RightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 90, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.LeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 270, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.TopRightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 45, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.TopLeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 315, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.BottomLeftDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 225, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                         else if (cell.mBestDir == FlowCellDirection.BottomRightDir)
                         {
                             sr.sprite = mArrowSprite;
                             Quaternion newRot = Quaternion.Euler(90, 135, 0);
                             icon.transform.rotation = newRot;
-                            icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                         }
                     }
-
                     break;
 
                 case DebugDisplayType.OFF:

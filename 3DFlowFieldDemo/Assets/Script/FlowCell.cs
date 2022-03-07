@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class FlowCell
@@ -11,7 +10,7 @@ public class FlowCell
     public int mBestCost;
     public FlowCellDirection mBestDir;
 
-    public readonly int mMaxCost = 100;
+    public readonly int mMaxCost = 255;
 
     public FlowCell(Vector3 worldPos, Vector2Int index)
     {

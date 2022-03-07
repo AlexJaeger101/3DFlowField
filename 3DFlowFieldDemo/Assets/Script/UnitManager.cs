@@ -57,22 +57,16 @@ public class UnitManager : MonoBehaviour
     {
         Vector2Int size = mFFM.mSize;
         float rad = mFFM.mCellRadius;
-        Vector2 spawnPos = new Vector2(size.x * rad * 2 + rad, size.y * rad * 2 + rad);
+        Vector2 spawnPos = new Vector2(size.x * (rad * 2) + rad, size.y * (rad * 2) + rad);
         int layer = LayerMask.GetMask("Impassable", "Terrian", "RoughTerrian");
         
         Vector3 newPos = Vector3.zero;
-        for (int i = 0; i < mSpawnNum; ++i)
-        {
-            GameObject newUnit = Instantiate(mUnitPrefab);
-            newUnit.transform.parent = transform;
-            mUnitList.Add(newUnit);
+        GameObject newUnit = Instantiate(mUnitPrefab);
+        newUnit.transform.parent = transform;
+        mUnitList.Add(newUnit);
 
-            while (Physics.OverlapSphere(newPos, 0.25f, layer).Length > 0)
-            {
-                newPos = new Vector3(Random.Range(0, spawnPos.x), 0, Random.Range(0, spawnPos.y));
-                newUnit.transform.position = newPos;
-            }
-        }
+        newPos = new Vector3(Random.Range(0, spawnPos.x - 1), 0, Random.Range(0, spawnPos.y - 1));
+        newUnit.transform.position = newPos + new Vector3(0.0f, 0.4f, 0.0f);
     }
 
     private void DestroyAllUnits()

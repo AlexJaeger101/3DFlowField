@@ -49,7 +49,7 @@ public class FlowField
             {
                 if (col.gameObject.layer == (int)GridLayers.IMPASSABLE)
                 {
-                    cell.IncCost(1000);
+                    cell.IncCost(255);
                     continue;
                 }
                 else if (!hasCostIncreased && col.gameObject.layer == (int)GridLayers.ROUGH_TERRAIN)
@@ -123,11 +123,8 @@ public class FlowField
 
     public FlowCell ConvertWorldToCellPos(Vector3 worldPos)
     {
-        float x = worldPos.x / (mSize.x * (mCellRadius * 2));
-        float y = worldPos.y / (mSize.y * (mCellRadius * 2));
-
-        x = Mathf.Clamp(x, 0, 1);
-        y = Mathf.Clamp(y, 0, 1);
+        float x = Mathf.Clamp(worldPos.x / (mSize.x * (mCellRadius * 2)), 0, 1);
+        float y = Mathf.Clamp(worldPos.z / (mSize.y * (mCellRadius * 2)), 0, 1);
 
         int flowCellX = Mathf.Clamp(Mathf.FloorToInt((mSize.x) * x), 0, mSize.x - 1);
         int flowCellY = Mathf.Clamp(Mathf.FloorToInt((mSize.y) * y), 0, mSize.y - 1);
